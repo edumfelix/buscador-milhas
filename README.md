@@ -15,6 +15,8 @@ O projeto é 100% Python, roda em GitHub Actions e publica a página no GitHub P
 
 > O workflow agendado já funciona e publica a página com o status de cada provedor. Se o IP do runner estiver bloqueado, o Smiles degrada para o status "Bloqueado" sem apagar dados; o probe G0 mostra o motivo.
 
+> Status detalhado, decisões e checklist de retomada: [PROGRESS.md](PROGRESS.md).
+
 ## Como funciona
 
 ```
