@@ -130,7 +130,7 @@ O bot é somente de saída (`sendMessage`), sem webhook ou polling em produção
 Observações:
 
 - O workflow commita `data/state.json` e `data/history.jsonl` com `[skip ci]`; o `GITHUB_TOKEN` não dispara outro workflow.
-- Não proteja `main` contra o push do bot (ou permita explicitamente o workflow).
+- Não proteja o branch padrão (`master`) contra o push do bot (ou permita explicitamente o workflow).
 - Se o repositório for privado, use Vercel/Cloudflare Pages para o site e considere o limite de 2.000 min/mês do Actions.
 - O cron do GitHub pode atrasar alguns minutos; a página mostra a hora real da última atualização.
 
