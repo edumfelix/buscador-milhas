@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Oportunidades de passagens com milhas saindo de Fortaleza (FOR).">
+  <title>{{ site_title }}</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <p class="eyebrow">Buscador pessoal de milhas</p>
+        <h1>Fortaleza <span class="arrow">→</span> oportunidades com milhas</h1>
+        <p class="subtitle">Origem {{ origin }} · próximos 180 dias · atualização automática a cada 6h</p>
+      </div>
+      <div class="hero-meta">
+        <p><span class="meta-label">Última atualização</span><br>{{ updated_at }}</p>
+        <p><span class="meta-label">Próxima prevista</span><br>{{ next_run_at }}</p>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="banner banner-{{ status_class }}" role="status">{{ status_message }}</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="toolbar" aria-label="Filtros">
+      <div class="filter">
+        <label for="filter-dest">Destino</label>
+        <select id="filter-dest">
+          <option value="">Todos</option>
+          {% for code, label in filter_destinations %}
+          <option value="{{ code }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter">
+        <label for="filter-program">Programa</label>
+        <select id="filter-program">
+          <option value="">Todos</option>
+          {% for code, label in filter_programs %}
+          <option value="{{ code }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter">
+        <label for="filter-cabin">Cabine</label>
+        <select id="filter-cabin">
+          <option value="">Todas</option>
+          {% for code, label in filter_cabins %}
+          <option value="{{ code }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter">
+        <label for="filter-max">Máximo de milhas</label>
+        <input id="filter-max" type="number" min="1000" step="1000" inputmode="numeric" placeholder="ex.: 30000">
+      </div>
+      <div class="filter filter-check">
+        <input id="filter-deals" type="checkbox">
+        <label for="filter-deals">Só novas ou quedas</label>
+      </div>
+      <div class="filter">
+        <label for="filter-sort">Ordenar por</label>
+        <select id="filter-sort">
+          <option value="miles">Milhas (menor)</option>
+          <option value="date">Data (mais próxima)</option>
+          <option value="newest">Descoberta (mais recente)</option>
+        </select>
+      </div>
+      <button id="filter-reset" class="btn btn-ghost" type="button">Limpar filtros</button>
+    </section>
+
+    <section class="results" aria-labelledby="results-title">
+      <div class="results-head">
+        <h2 id="results-title">Oportunidades</h2>
+        <p class="count" id="count" aria-live="polite">{{ total_cards }} oportunidade(s)</p>
+      </div>
+
+      {% if cards %}
+      <div class="cards" id="cards">
+        {% for card in cards %}
+        <article class="card"
+          data-destination="{{ card.destination }}"
+          data-program="{{ card.provider }}"
+          data-cabin="{{ card.cabin }}"
+          data-miles="{{ card.miles }}"
+          data-date="{{ card.date_iso }}"
+          data-first-seen="{{ card.first_seen_iso }}"
+          data-badges="{{ card.badges|join(' ') }}">
+          <div class="card-head">
+            <div>
+              <p class="route">{{ card.origin }} <span class="arrow">→</span> {{ card.destination }}</p>
+              <p class="city">{{ card.city }}{% if card.country %} · {{ card.country }}{% endif %}</p>
+            </div>
+            <div class="badges">
+              {% if card.is_new %}<span class="badge badge-new">Nova</span>{% endif %}
+              {% if card.is_drop %}<span class="badge badge-drop">Queda</span>{% endif %}
+              {% if card.below_average %}<span class="badge badge-avg">Abaixo da média</span>{% endif %}
+              {% if card.suspicious %}<span class="badge badge-warn">Verificar preço</span>{% endif %}
+            </div>
+          </div>
+          <p class="date">{{ card.date_br }} · {{ card.weekday }}</p>
+          <div class="facts">
+            <span class="fact">{{ card.program }}</span>
+            <span class="fact">{{ card.cabin_label }}</span>
+            <span class="fact">{{ card.stops_label }}</span>
+          </div>
+          <p class="price">
+            <strong>{{ card.miles_fmt }}</strong> milhas
+            {% if card.taxes_brl is not none %}
+            <span class="taxes">+ {{ card.taxes_fmt }}</span>
+            {% else %}
+            <span class="taxes">· taxas não informadas</span>
+            {% endif %}
+          </p>
+          <p class="freshness">Verificado {{ card.verified_ago }}</p>
+          <div class="actions">
+            {% if card.booking_url %}
+            <a class="btn" href="{{ card.booking_url }}" target="_blank" rel="noopener noreferrer">Abrir no programa</a>
+            {% endif %}
+            <details class="rt">
+              <summary>Ida e volta</summary>
+              <p class="rt-copy">{{ card.copy_text }}</p>
+              <div class="rt-links">
+                {% for rt in card.rt_links %}
+                <a class="btn btn-ghost" href="{{ rt.url }}" target="_blank" rel="noopener noreferrer">Volta +{{ rt.days }}d</a>
+                {% endfor %}
+              </div>
+              {% if not card.rt_verified %}
+              <p class="hint">O link abre a busca do programa; os parâmetros de volta ainda não foram validados. Use os dados acima para preencher a busca.</p>
+              {% endif %}
+            </details>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      <p class="empty" id="empty" hidden>Nenhuma oportunidade com esses filtros.</p>
+      {% else %}
+      <div class="empty">
+        <p>Nenhuma oportunidade encontrada nesta atualização.</p>
+        <p>Assim que a coleta encontrar disponibilidade, ela aparece aqui.</p>
+      </div>
+      {% endif %}
+    </section>
+
+    <section class="panel" aria-labelledby="coverage-title">
+      <h2 id="coverage-title">Cobertura e status</h2>
+      <p class="muted">{{ coverage_note }}</p>
+      <ul class="providers">
+        {% for provider in providers %}
+        <li class="provider">
+          <span class="dot dot-{{ provider.status_class }}" aria-hidden="true"></span>
+          <div>
+            <strong>{{ provider.name }}</strong>
+            <span class="status">{{ provider.status_label }}</span>
+            <p class="muted">{{ provider.detail }}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="panel" aria-labelledby="links-title">
+      <h2 id="links-title">Buscar em outros programas</h2>
+      <p class="muted">Estes programas não têm coleta automática no MVP. O link abre a busca oficial; informe rota e datas.</p>
+      <div class="link-grid">
+        {% for link in links %}
+        <a class="link-card" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
+          <strong>{{ link.name }}</strong>
+          {% if link.note %}<span>{{ link.note }}</span>{% endif %}
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="panel about">
+      <h2>Como funciona</h2>
+      <p>A coleta consulta o site público da Smiles em modo convidado, com limites de requisição e rodízio; a Azul está em implementação. A LATAM exige login e fica para a v2. Não armazenamos credenciais.</p>
+      <p>Os valores são em milhas + taxas e mudam rápido. Confirme a disponibilidade no site do programa antes de emitir. A ida e volta não é precificada aqui: o botão apenas abre a busca com uma sugestão de retorno.</p>
+      <p>Projeto pessoal, sem vínculo com as companhias. Página gerada em {{ generated_at }}.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>Disponibilidade e valores mudam rápido; confirme no site do programa antes de emitir.</p>
+    <p>Buscador de Milhas — Fortaleza (FOR). Uso pessoal.</p>
+    <noscript>Os filtros precisam de JavaScript; a lista completa continua visível acima.</noscript>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+name: atualizar
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      providers:
+        description: "Provedores: smiles,azul,demo,all"
+        required: false
+        default: "smiles,azul"
+      max_units:
+        description: "Máximo de janelas por provedor (vazio = config)"
+        required: false
+        default: ""
+      dry_run:
+        description: "Executar sem commitar/publicar"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: atualizar-milhas
+  cancel-in-progress: false
+
+env:
+  PYTHONUNBUFFERED: "1"
+  TZ: America/Fortaleza
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Instalar dependências
+        run: pip install -e .
+
+      - name: Instalar Playwright (Smiles/Azul)
+        if: ${{ contains(inputs.providers || 'smiles,azul', 'smiles') || contains(inputs.providers || 'smiles,azul', 'azul') || contains(inputs.providers || 'smiles,azul', 'all') }}
+        run: |
+          pip install -e ".[browser]"
+          python -m playwright install --with-deps chromium
+
+      - name: Coletar e gerar site
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+        run: |
+          ARGS=(run --providers "${{ inputs.providers || 'smiles,azul' }}" --render)
+          if [ -n "${{ inputs.max_units }}" ]; then
+            ARGS+=(--max-units "${{ inputs.max_units }}")
+          fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS+=(--dry-run)
+          fi
+          python -m buscador "${ARGS[@]}"
+
+      - name: Commitar estado
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "Sem mudanças no estado."
+          else
+            git commit -m "chore: atualiza oportunidades [skip ci]"
+            git push || (git pull --rebase && git push)
+          fi
+
+      - name: Configurar Pages
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        uses: actions/configure-pages@v5
+
+      - name: Upload do site
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy
+        id: deployment
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        uses: actions/deploy-pages@v4

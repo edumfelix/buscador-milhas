@@ -1,0 +1,89 @@
+{
+  "requestedFlightSegmentList": [
+    {
+      "flightList": [
+        {
+          "cabin": "ECONOMIC",
+          "stops": 0,
+          "sourceGDS": "G3",
+          "availableSeats": 3,
+          "airline": {"code": "G3", "name": "GOL (G3)"},
+          "departure": {
+            "date": "2026-11-12T06:00:00",
+            "airport": {"code": "FOR"}
+          },
+          "arrival": {
+            "date": "2026-11-12T09:00:00",
+            "airport": {"code": "GRU"}
+          },
+          "legList": [
+            {
+              "flightNumber": "1234",
+              "marketingAirline": {"code": "G3"},
+              "operationAirline": {"code": "G3"}
+            }
+          ],
+          "fareList": [
+            {
+              "type": "SMILES_MONEY",
+              "miles": 9000,
+              "money": 500,
+              "g3": {"costTax": "30.00"}
+            },
+            {
+              "type": "SMILES",
+              "miles": 14000,
+              "money": 0,
+              "g3": {"costTax": "34.50"}
+            },
+            {
+              "type": "SMILES_CLUB",
+              "miles": 12000,
+              "money": 0,
+              "g3": {"costTax": "34.50"}
+            }
+          ]
+        },
+        {
+          "cabin": "BUSINESS",
+          "stops": 1,
+          "sourceGDS": "G3",
+          "availableSeats": 1,
+          "airline": {"code": "G3", "name": "GOL (G3)"},
+          "departure": {
+            "date": "2026-11-12T10:00:00",
+            "airport": {"code": "FOR"}
+          },
+          "arrival": {
+            "date": "2026-11-12T18:00:00",
+            "airport": {"code": "GRU"}
+          },
+          "legList": [
+            {
+              "flightNumber": "5678",
+              "marketingAirline": {"code": "G3"}
+            },
+            {
+              "flightNumber": "9012",
+              "marketingAirline": {"code": "G3"}
+            }
+          ],
+          "fareList": [
+            {
+              "type": "SMILES_CLUB",
+              "miles": 40000,
+              "money": 0,
+              "g3": {"costTax": "50.00"}
+            }
+          ]
+        }
+      ],
+      "calendarDayList": [
+        {"date": "2026-11-10", "miles": 11000, "fare": {"type": "SMILES_CLUB"}},
+        {"date": "2026-11-11", "miles": 13000, "fare": {"type": "SMILES_CLUB"}},
+        {"date": "2026-11-13", "miles": 12500, "fare": {"type": "SMILES_CLUB"}},
+        {"date": "2026-11-14", "miles": 15000, "fare": {"type": "SMILES_CLUB"}}
+      ]
+    }
+  ]
+}

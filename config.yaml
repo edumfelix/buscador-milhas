@@ -1,0 +1,106 @@
+origin: FOR
+horizon_days: 180
+adults: 1
+timezone: America/Fortaleza
+
+cabins:
+  domestic: [Y]
+  international: [Y, J]
+
+destinations:
+  domestic: [GRU, GIG, BSB, SSA, REC, NAT, BEL, MAO, POA, VCP]
+  international: [MIA, MCO, LIS, MAD, CDG, DXB, DOH, EZE, SCL, BOG, LIM]
+
+paths:
+  data: data
+  templates: templates
+  static: static
+  site: site
+
+coverage:
+  hot_destinations: [GRU, GIG, MIA, LIS, MAD]
+  max_age_hours: 168
+  stale_after_hours: 26
+
+alerting:
+  new_enabled: true
+  drop_min_pct: 10
+  drop_min_miles: 1000
+  suspicious_drop_pct: 60
+  cooldown_hours: 24
+  max_items_per_message: 10
+  max_messages_per_run: 3
+
+site:
+  title: "Buscador de Milhas — Fortaleza (FOR)"
+  max_cards: 200
+
+providers:
+  smiles:
+    name: "Smiles (Gol)"
+    enabled: true
+    kind: scrape
+    regions: [domestic, international]
+    domestic_cabins: [Y]
+    international_cabins: [Y, J]
+    window_days: 7
+    sale_window_days: 329
+    max_requests_per_run: 180
+    request_delay_ms: [4000, 8000]
+    timeout_seconds: 60
+    deep_link: "https://www.smiles.com.br/mfe/emissao-passagem/"
+  azul:
+    name: "Azul Fidelidade"
+    enabled: true
+    kind: scrape
+    regions: [domestic]
+    domestic_cabins: [Y]
+    international_cabins: []
+    window_days: 6
+    sale_window_days: 180
+    max_navigations_per_run: 8
+    navigation_delay_seconds: 20
+    timeout_seconds: 60
+    deep_link: "https://www.voeazul.com.br/br/pt/home/selecao-voo"
+
+links:
+  qatar:
+    name: "Qatar Privilege Club"
+    url: "https://www.qatarairways.com/en/Privilege-Club/redeem-avios.html"
+    note: "Parceiro Smiles/Azul · hub DOH"
+    enabled: true
+  iberia:
+    name: "Iberia Plus"
+    url: "https://www.iberia.com/br/iberia-plus/"
+    note: "Voo direto FOR–MAD"
+    enabled: true
+  copa:
+    name: "Copa ConnectMiles"
+    url: "https://www.copaair.com/en-br/connectmiles/miles/use-miles-on-copa-airlines/"
+    note: "Parceiro Smiles/Azul · hub PTY"
+    enabled: true
+  flyingblue:
+    name: "Flying Blue"
+    url: "https://www.flyingblue.com/"
+    note: "Air France direto FOR–CDG; parceira Smiles"
+    enabled: true
+  etihad:
+    name: "Etihad Guest"
+    url: "https://www.etihad.com/en/etihad-guest"
+    note: "Parceiro Smiles/Azul · hub AUH"
+    enabled: true
+  aeromexico:
+    name: "Aeromexico Rewards"
+    url: "https://www.aeromexico.com/en/rewards"
+    note: "Parceiro Smiles/Azul · hub MEX"
+    enabled: true
+  tap:
+    name: "TAP Miles&Go"
+    url: "https://www.flytap.com/en-us/miles-and-go"
+    note: "Voo direto FOR–LIS (opcional; habilite se quiser)"
+    enabled: false
+  latam:
+    name: "LATAM Pass"
+    url: "https://www.latamairlines.com/br/pt/oferta-voos?redemption=true"
+    note: "v2 — exige login; não coletado no MVP"
+    enabled: false
