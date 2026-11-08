@@ -146,7 +146,7 @@ def cmd_run(args: argparse.Namespace) -> int:
         deadline_minutes=args.deadline_minutes,
         dry_run=args.dry_run,
         send_alerts=not args.no_alerts,
-        render=not args.no_render,
+        render=args.render,
         fake_block=args.fake_block,
     )
     alert_sender = None
@@ -295,7 +295,19 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--deadline-minutes", type=float, default=35.0)
     run.add_argument("--dry-run", action="store_true")
     run.add_argument("--no-alerts", action="store_true")
-    run.add_argument("--no-render", action="store_true")
+    run.add_argument(
+        "--render",
+        dest="render",
+        action="store_true",
+        default=True,
+        help="Gerar o site ao final (padrão)",
+    )
+    run.add_argument(
+        "--no-render",
+        dest="render",
+        action="store_false",
+        help="Não gerar o site",
+    )
     run.add_argument("--fake-block", default=None)
     run.add_argument("--data-dir", default=None)
     run.add_argument("--site-dir", default=None)

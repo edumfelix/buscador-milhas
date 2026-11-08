@@ -122,6 +122,7 @@ O bot é somente de saída (`sendMessage`), sem webhook ou polling em produção
 1. Crie um repositório **público** (Pages grátis e Actions ilimitadas no plano Free).
 2. Faça o push do projeto.
 3. Em **Settings → Pages**, selecione **GitHub Actions** como fonte.
+   Se o branch padrão não for `main`, vá em **Settings → Environments → github-pages → Deployment branches and tags** e permita o branch (ex.: `master`) ou **All branches**. Sem isso, o deploy falha com “Branch 'master' is not allowed to deploy to github-pages”.
 4. Em **Settings → Secrets and variables → Actions**, cadastre os dois secrets do Telegram.
 5. Rode o workflow **discovery** (manual) e baixe o artifact para ver o gate G0 do IP do runner.
 6. Rode o workflow **atualizar** com `providers=smiles,azul`. Se o Smiles estiver bloqueado, a página mostra o status e os dados antigos permanecem.
