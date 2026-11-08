@@ -89,20 +89,31 @@ Tudo fica em `config.yaml`:
 ## Telegram
 
 1. Crie um bot com `@BotFather` e guarde o token.
-2. Envie `/start` ao bot.
-3. Descubra o `chat_id`:
+2. Abra o bot no Telegram e envie `/start`.
+3. Descubra o `chat_id` (PowerShell):
+
+   ```powershell
+   $env:TELEGRAM_BOT_TOKEN = "SEU_TOKEN"
+   .venv\Scripts\python.exe -m buscador telegram-chat-id
+   ```
+
+   Em CMD:
 
    ```bat
-   .venv\Scripts\python -m buscador telegram-chat-id --token "SEU_TOKEN"
+   set TELEGRAM_BOT_TOKEN=SEU_TOKEN
+   .venv\Scripts\python -m buscador telegram-chat-id
    ```
 
 4. Teste o envio:
 
-   ```bat
-   .venv\Scripts\python -m buscador alerts test --token "SEU_TOKEN" --chat-id "SEU_CHAT_ID"
+   ```powershell
+   $env:TELEGRAM_CHAT_ID = "SEU_CHAT_ID"
+   .venv\Scripts\python.exe -m buscador alerts test
    ```
 
 5. No GitHub, cadastre os secrets `TELEGRAM_BOT_TOKEN` e `TELEGRAM_CHAT_ID`.
+
+> **Nunca cole o token na linha de comando nem no chat.** Ele fica no histórico do shell e nos logs. Use `TELEGRAM_BOT_TOKEN` no ambiente. Se o token vazar, revogue no `@BotFather` (`/mybots` → bot → API Token → Revoke) e cadastre o novo.
 
 O bot é somente de saída (`sendMessage`), sem webhook ou polling em produção. O primeiro run é silencioso para evitar uma avalanche de mensagens.
 
