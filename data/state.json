@@ -4,7 +4,7 @@
     "smiles|FOR|GIG|Y": {
       "checked_dates": [],
       "error": "Smiles bloqueou o IP (406). Pare e aguarde; insistir piora.",
-      "last_checked_at": "2026-11-09T01:24:37-03:00",
+      "last_checked_at": "2026-11-09T12:01:25-03:00",
       "status": "error"
     }
   },
@@ -12,26 +12,26 @@
   "providers": {
     "azul": {
       "error": "Azul: adaptador pendente do spike (M3). Requer Playwright e respeito ao limite de navegações por IP.",
-      "finished_at": "2026-11-09T01:24:37.032446-03:00",
+      "finished_at": "2026-11-09T12:01:25.529307-03:00",
       "last_success": null,
       "navigations": 0,
       "provider": "azul",
       "requests": 0,
       "results": 0,
       "scans": 0,
-      "started_at": "2026-11-09T01:24:37.032446-03:00",
+      "started_at": "2026-11-09T12:01:25.529307-03:00",
       "status": "not_implemented"
     },
     "smiles": {
       "error": "Smiles bloqueou o IP (406). Pare e aguarde; insistir piora.",
-      "finished_at": "2026-11-09T01:24:37.032446-03:00",
+      "finished_at": "2026-11-09T12:01:25.529307-03:00",
       "last_success": null,
       "navigations": 0,
       "provider": "smiles",
       "requests": 1,
       "results": 0,
       "scans": 0,
-      "started_at": "2026-11-09T01:24:37.032446-03:00",
+      "started_at": "2026-11-09T12:01:25.529307-03:00",
       "status": "blocked"
     }
   },
@@ -107,8 +107,32 @@
       "scans": 0,
       "started_at": "2026-11-09T01:24:37.032446-03:00",
       "status": "not_implemented"
+    },
+    {
+      "error": "Smiles bloqueou o IP (406). Pare e aguarde; insistir piora.",
+      "finished_at": "2026-11-09T12:01:25.529307-03:00",
+      "last_success": null,
+      "navigations": 0,
+      "provider": "smiles",
+      "requests": 1,
+      "results": 0,
+      "scans": 0,
+      "started_at": "2026-11-09T12:01:25.529307-03:00",
+      "status": "blocked"
+    },
+    {
+      "error": "Azul: adaptador pendente do spike (M3). Requer Playwright e respeito ao limite de navegações por IP.",
+      "finished_at": "2026-11-09T12:01:25.529307-03:00",
+      "last_success": null,
+      "navigations": 0,
+      "provider": "azul",
+      "requests": 0,
+      "results": 0,
+      "scans": 0,
+      "started_at": "2026-11-09T12:01:25.529307-03:00",
+      "status": "not_implemented"
     }
   ],
-  "updated_at": "2026-11-09T01:24:37-03:00",
+  "updated_at": "2026-11-09T12:01:25-03:00",
   "version": 1
 }
